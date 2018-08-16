@@ -8,5 +8,9 @@ Each tutroial has code ported to C based on `-std=c99`. Execute `make` to compil
 Most of the resource used in each tutorial except for some customization belong to Lazy Foo's. 
 Such resource's license is still left intact and adhere to original form. More info please contact [here](http://lazyfoo.net/contact.php).
 
+# Note
+
+The C port is not 100% similar to the original. May be slightly different, or more customization for learning purpose. So watch out and look at the code!
+
 # License
 [MIT](https://github.com/haxpor/lazyfoo-sdl2c/blob/master/LICENSE), Wasin Thonkaew
