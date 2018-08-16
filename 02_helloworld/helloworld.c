@@ -1,3 +1,12 @@
+/**
+ * 02 - Helloworld
+ *
+ * A basic building block of code for working on in future tutorials. It loads .bmp image, blit into created window's surface, then wait
+ * for 5 seconds until it will quit itself.
+ *
+ * Notice that during waiting (delay), the window's titlebar and window itself isn't responsive.
+ */
+
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>

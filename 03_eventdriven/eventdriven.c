@@ -1,3 +1,9 @@
+/**
+ * 03 - Event Driven
+ *
+ * Demonstrate polling event in game loop, then quit the loop when detects SDL_QUIT event via SDL_PollEvent().
+ */
+
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
