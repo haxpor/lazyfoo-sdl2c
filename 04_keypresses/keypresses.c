@@ -3,6 +3,9 @@
  *
  * Demonstrate key event handling. It will show corresponding image whenever up, down, left, or right key is pressed.
  * If user presses Esc key, the program will quit.
+ * 
+ * As a plus, this tutorial configured its Makefile to build with -g flag via gcc to produce source level debugging information,
+ * so you could test it with 'gdb keypresses'.
  */
 
 #include <SDL2/SDL.h>
@@ -27,6 +30,10 @@ bool init();
 bool loadMedia();
 void close();
 
+// just a test function calling from gdb (or llvm) for testing purpose
+// to print address of current surface
+void debuggerPrint();
+
 // load individual image
 SDL_Surface* loadSurface(const char* const path);
 
@@ -41,6 +48,13 @@ SDL_Surface* gKeyPressSurfaces[KEY_PRESS_SURFACE_TOTAL];
 
 // current displayed image
 SDL_Surface* gCurrentSurface = NULL;
+
+void debuggerPrint()
+{
+	// add \n as well to let buffer flushed so we could see output in gdb
+	printf("address of gCurrentSurface: %p\n", &gCurrentSurface);
+	printf("address of variable gCurrentSurface pointing to: %p\n", gCurrentSurface);
+}
 
 bool init() {
 	// initialize flag

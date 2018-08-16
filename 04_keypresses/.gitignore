@@ -1,1 +1,4 @@
 keypresses
+*.swp
+*.swo
+*.dSYM
