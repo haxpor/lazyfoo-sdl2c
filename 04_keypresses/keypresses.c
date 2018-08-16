@@ -140,8 +140,6 @@ void close()
 		SDL_FreeSurface(gKeyPressSurfaces[i]);
 		gKeyPressSurfaces[i] = NULL;
 	}
-	// set null to current surface
-	gCurrentSurface = NULL;
 
 	// destroy window
 	SDL_DestroyWindow(gWindow);
