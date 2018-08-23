@@ -101,6 +101,8 @@ bool loadMedia()
 void close()
 {
 	// clear resource of our textures
+	// if gSpriteSheetTexture is allocated on heap via malloc() then
+	// we have to manually free() after the following call as well.
 	LTexture_FreeInternal(&gSpriteSheetTexture);
 
 	// destroy window
