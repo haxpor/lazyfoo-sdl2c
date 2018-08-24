@@ -12,5 +12,9 @@ Such resource's license is still left intact and adhere to original form. More i
 
 The C port is not 100% similar to the original. May be slightly different, or more customization for learning purpose. So watch out and look at the code!
 
+Others as follows
+
+* `LTexture.c` and `LTexture.h` are gradually improved, refactored, and added more functionality on top slightly more from original tutorial. If you need a more updated version of it, look at the most recent sample.
+
 # License
 [MIT](https://github.com/haxpor/lazyfoo-sdl2c/blob/master/LICENSE), Wasin Thonkaew
