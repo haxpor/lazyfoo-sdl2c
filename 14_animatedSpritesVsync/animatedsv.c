@@ -12,11 +12,11 @@
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define SETFRAME(var, arg1, arg2, arg3, arg4)		\
-		do {							\
-			var.x = arg1;					\
-			var.y = arg2;					\
-			var.w = arg3;					\
-			var.h = arg4;					\
+		do {										\
+			var.x = arg1;							\
+			var.y = arg2;							\
+			var.w = arg3;							\
+			var.h = arg4;							\
 		} while(0)
 
 bool init();
