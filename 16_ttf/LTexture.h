@@ -1,0 +1,78 @@
+/*
+ * LTexture
+ *
+ * It represents a texture wrapper with functionality related to it.
+ */
+
+#ifndef LTexture_h_
+#define LTexture_h_
+
+#include <stdbool.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+
+// i know guys, we will care about byte alignment of struct later ;)
+struct LTexture {
+	SDL_Texture* texture;
+	int width;
+	int height;
+};
+typedef struct LTexture LTexture;
+
+/*
+ * Load texture at the specified path.
+ * out will be filled with newly created LTexture.
+ * Return true if operation is successful, otherwise return false.
+ */
+extern bool LTexture_LoadFromFile(const char* path, LTexture* out);
+
+/*
+ * Load texture from rendered text, and color.
+ * out will be filled with newly created LTexture.
+ * wrapLength is the length in pixel to do wrapping with newlines. Set to 0 to disable auto-wrapping.
+ * Return true if operation is successful, otherwise return false.
+ */
+extern bool LTexture_LoadFromRenderedText(const char* textureText, SDL_Color textColor, Uint32 wrapLength, LTexture* out);
+
+/*
+ * Render LTexture at given point.
+ */
+extern void LTexture_Render(LTexture* texture, int x, int y);
+
+/*
+ * Render LTexture at given point along with rotation angle, center point to rotate, and flipping type.
+ */
+extern void LTexture_RenderEx(LTexture* ltexture, int x, int y, double angle, SDL_Point* center, SDL_RendererFlip flip);
+
+/*
+ * Render clipped LTexture at the given point.
+ */
+extern void LTexture_ClippedRender(LTexture* texture, int x, int y, SDL_Rect* clip);
+
+/*
+ * Render clipped LTexture at the given point along with rotation angle, center point to rotate, and flipping type.
+ */
+extern void LTexture_ClippedRenderEx(LTexture* ltexture, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip);
+
+/*
+ * Set color modulation.
+ */
+extern void LTexture_SetColor(LTexture* ltexture, Uint8 red, Uint8 green, Uint8 blue);
+
+/*
+ * Set blending mode.
+ */
+extern void LTexture_SetBlendMode(LTexture* ltexture, SDL_BlendMode blending);
+
+/*
+ * Set alpha.
+ */
+extern void LTexture_SetAlpha(LTexture* ltexture, Uint8 alpha);
+
+/*
+ * Clear LTexture's resource.
+ * Caller still need to free() LTexture structure if it was dynamically created via malloc().
+ */
+extern void LTexture_Free(LTexture* texture);
+
+#endif /* LTexture_h_ */
