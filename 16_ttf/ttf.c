@@ -26,6 +26,7 @@ void close();
 // refer to variables declared and defined elsewhere (in common.h)
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
+extern TTF_Font* gFont;
 
 LTexture gTexture;
 
