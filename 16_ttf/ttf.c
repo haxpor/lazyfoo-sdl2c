@@ -27,9 +27,6 @@ void close();
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
 
-// our textures and animation
-const int kWalkingAnimationFrames = 4;
-SDL_Rect gAnimationFrames[kWalkingAnimationFrames];
 LTexture gTexture;
 
 bool init() {
