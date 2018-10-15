@@ -123,6 +123,10 @@ bool setup()
 		SETFRAME(buttonFrames[i], 0, BUTTON_HEIGHT*i, BUTTON_WIDTH, BUTTON_HEIGHT);
 	}
 
+	// set logical designated design resolution in case when
+	// we try to go for independent resolution later when going in full screen
+	SDL_RenderSetLogicalSize(gRenderer, 640, 480);
+
 	return true;
 }
 
