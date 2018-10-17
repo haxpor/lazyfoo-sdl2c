@@ -19,11 +19,16 @@
 			var.h = arg4;							\
 		} while(0)
 
-bool quit = false;
-
+// -- functions
 bool init();
-bool loadMedia();
+bool setup();
+void update();
+void handleEvent(SDL_Event *e);
+void render();
 void close();
+
+// -- variables
+bool quit = false;
 
 // refer to variables declared and defined elsewhere (in common.h)
 extern SDL_Window* gWindow;
@@ -39,14 +44,14 @@ LTexture* gTexture = NULL;
 bool init() {
 	// initialize sdl
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		SDL_Log("SDL could not initialize! SDL_Error: %s", SDL_GetError());
 		return false;
 	}
 	
 	// create window
 	gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL) {
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+		SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
 		return false;
 	}
 
@@ -56,7 +61,7 @@ bool init() {
 	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (gRenderer == NULL)
 	{
-		printf("SDL could not create renderer! SDL_Error: %s\n", SDL_GetError());
+		SDL_Log("SDL could not create renderer! SDL_Error: %s", SDL_GetError());
 		return false;
 	}
 	
@@ -70,7 +75,7 @@ bool init() {
 	{
 		// from document, not always that error string from IMG_GetError() will be set
 		// so don't depend on it, just for pure information
-		printf("SDL_Image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+		SDL_Log("SDL_Image could not initialize! SDL_image Error: %s", IMG_GetError());
 		return false;
 	}
 
@@ -78,7 +83,7 @@ bool init() {
 	// initialize SDL_ttf
 	if (TTF_Init() == -1)
 	{
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s", TTF_GetError());
 		return false;
 	}
 #endif
@@ -93,7 +98,7 @@ bool setup()
 	gTexture = LTexture_LoadFromFile("your-texture.png");
 	if (gTexture == NULL)
 	{
-		printf("Failed to load texture\n");
+		SDL_Log("Failed to load texture");
 		return false;
 	}
 
@@ -155,14 +160,14 @@ int main(int argc, char* args[])
 	// start up SDL and create window
 	if (!init())
 	{
-		printf("Failed to initialize\n");
+		SDL_Log("Failed to initialize");
 	}	
 	else
 	{
 		// load media, and set up
 		if (!setup())
 		{
-			printf("Failed to setup!\n");
+			SDL_Log("Failed to setup!");
 		}
 		else
 		{
