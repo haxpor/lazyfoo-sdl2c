@@ -118,3 +118,7 @@ Note that we specify `-DDISABLE_SDL_TTF_LIB` to disable compilation and linking 
 * Get all required `.dll` which are `SDL2.dll`, `SDL2_image.dll`, `SDL2_mixer.dll`, `libgcc_s_sjlj-1.dll`, `libmmpg123-0.dll`, `libpng16-16.dll`, `libwinpthread-1.dll`, and `zlib1.dll`. Note that you can get releveant `.dll` file from its `<installation-path>/bin`. Other than that, look at your mingw's toolchain's `bin` and `lib` directory.
 * Copy `.exe` file along with files from previous two steps to your Windows 32 bit machine.
 * Run and done!
+
+# Changes
+
+* Fixed `common.h` to not by default include `SDL_ttf.h` to consistent with `-DDISABLE_SDL_TTF_LIB` when compile.
