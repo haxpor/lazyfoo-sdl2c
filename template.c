@@ -122,8 +122,9 @@ void handleEvent(SDL_Event *e)
 	{
 		switch (e->key.keysym.sym)
 		{
-		case SDLK_ESCAPE:
-			quit = true;
+		  case SDLK_ESCAPE:
+			  quit = true;
+        break;
 		}
 	}
 }
