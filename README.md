@@ -5,18 +5,22 @@ Each tutroial has code ported to C based on `-std=c99`. Execute `make` to compil
 
 # Credits Author
 
-Most of the resource used in each tutorial except for some customization belong to Lazy Foo's. 
-Such resource's license is still left intact and adhere to original form. More info please contact [here](http://lazyfoo.net/contact.php).
+This project is based on the work of [Lazyfoo](http://lazyfoo.net/tutorials/SDL/).
+See _License_ for more information about rights.
 
 # Note
 
-The C port is not 100% similar to the original. May be slightly different, or more customization for learning purpose. So watch out and look at the code!
-
-Use template files as seen at root directory for easing in creating a new sample.
-
-Others as follows
-
-* `LTexture.c` and `LTexture.h` are gradually improved, refactored, and added more functionality on top slightly more from original tutorial. If you need a more updated version of it, look at the most recent sample.
+* The C port is not 100% similar to the original. May be slightly different, or more customization for learning purpose. So watch out and look at the code!
+* Use `template.c`, and `template.gitignore` files to kickstart each sample.
+* `LTexture.c`, `LTexture.h`, `LButton.c`, `LButton.h`, `common.c`, `common.h` are gradually improved, refactored, and added more functionality on top from one sample to another. If you need a more updated version of it, look at the most recent sample.
+* Each individual sample is self-contained.
 
 # License
-[MIT](https://github.com/haxpor/lazyfoo-sdl2c/blob/master/LICENSE), Wasin Thonkaew
+
+* As stated in http://lazyfoo.net/contact.php, the rights of this derived works (code and assets) still belong to Lazyfoo otherwise noted.
+  [LGPL](https://www.gnu.org/copyleft/lesser.html), LazyFoo, original author this repository based on.
+
+* The code that's not based on original work is belong to me (Wasin Thonkaew) as [MIT](https://github.com/haxpor/lazyfoo-sdl2c/blob/master/LICENSE).
+* Other additional assets are belong to what is noted in README.md file of corresponding sample.
+
+If you have any enquiry about modifying or extending the project, please contact LazyFoo [here](http://lazyfoo.net/contact.php).
