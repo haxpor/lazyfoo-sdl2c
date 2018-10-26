@@ -1,6 +1,5 @@
 /**
- * template main source file for sample
- *
+ * Template main source file
  */
 
 #include <SDL2/SDL.h>
@@ -8,6 +7,7 @@
 #include <stdbool.h>
 #include "common.h"
 #include "LTexture.h"
+#include "LTimer.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -18,6 +18,10 @@
 			var.w = arg3;							\
 			var.h = arg4;							\
 		} while(0)
+
+// cap thus using fixed deltaTime step
+#define TARGET_FPS 60
+#define FIXED_DELTATIME 1.0f / TARGET_FPS
 
 // -- functions
 bool init();
@@ -30,22 +34,9 @@ void close();
 // -- variables
 bool quit = false;
 
-// refer to variables declared and defined elsewhere (in common.h)
-extern SDL_Window* gWindow;
-extern SDL_Renderer* gRenderer;
-
-#ifndef DISABLE_SDL_TTF_LIB
-extern TTF_Font* gFont;
-#endif
-
-// global texture for button
-LTexture* gTexture = NULL;
-
 // independent time loop
 Uint32 currTime = 0;
 Uint32 prevTime = 0;
-float frameTime = 0.0f;
-float avgFPS = 0.0f;
 
 bool init() {
 	// initialize sdl
@@ -64,7 +55,7 @@ bool init() {
 	// create renderer for window
 	// as we use SDL_Texture, now we need to use renderer to render stuff
 	// also use vsync to cap framerate to what video card can do
-	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 	if (gRenderer == NULL)
 	{
 		SDL_Log("SDL could not create renderer! SDL_Error: %s", SDL_GetError());
@@ -100,20 +91,12 @@ bool init() {
 // include any asset loading sequence, and preparation code here
 bool setup()
 {
-	// load buttons texture
-	gTexture = LTexture_LoadFromFile("your-texture.png");
-	if (gTexture == NULL)
-	{
-		SDL_Log("Failed to load texture");
-		return false;
-	}
-
 	return true;
 }
 
 void update(float deltaTime)
 {
-	// nothing here for this sample.
+  
 }
 
 void handleEvent(SDL_Event *e, float deltaTime)
@@ -137,27 +120,19 @@ void handleEvent(SDL_Event *e, float deltaTime)
 
 void render(float deltaTime)
 {
-	// clear screen
-	SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
-	SDL_RenderClear(gRenderer);
-
-  frameTime += deltaTime;
-  if (frameTime >= 1.0f)
-  {
-    avgFPS = frameCount;
-    // reset framecount
-    frameCount = 0;
-    // reset frame time
-    frameTime -= 1.0f;
-  }
-  SDL_Log("avgFPS %.2f", avgFPS);
+  // clear screen
+  SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
+  SDL_RenderClear(gRenderer);
 }
 
 void close()
 {
-	// clear resource of our textures
-	if (gTexture != NULL)
-		LTexture_Free(gTexture);
+  // free font
+  if (gFont != NULL)
+  {
+    TTF_CloseFont(gFont);
+    gFont = NULL;
+  }
 
 	// destroy window
 	SDL_DestroyRenderer(gRenderer);
@@ -195,12 +170,12 @@ int main(int argc, char* args[])
 			// while application is running
 			while (!quit)
 			{
-        // prepare delta time to feed to handleEvent(), update() and render()
+        // prepare delta time to feed to both handleEvent(), update(), and render()
         prevTime = currTime;
         currTime = SDL_GetTicks();
         // calculate per second
-        float deltaTime = (currTime = prevTime) / 1000.0f;
-        
+        float deltaTime = (currTime - prevTime) / 1000.0f;
+
 				// handle events on queue
 				// if it's 0, then it has no pending event
 				// we keep polling all event in each game loop until there is no more pending one left
@@ -210,15 +185,36 @@ int main(int argc, char* args[])
 					handleEvent(&e, deltaTime);
 				}
 
-				update(deltaTime);
-				render(deltaTime);			
+#ifndef DISABLE_FPS_CALC
+        // fixed step
+        common_frameTime += deltaTime;
+        common_frameAccumTime += deltaTime;
+#endif
+        if (common_frameTime >= FIXED_DELTATIME)
+        {
+#ifndef DISABLE_FPS_CALC
+          common_frameCount++;
+          
+          // check to reset frame time
+          if (common_frameAccumTime >= 1.0f)
+          {
+            common_avgFPS = common_frameCount / common_frameAccumTime;
+            common_frameCount = 0;
+            common_frameAccumTime -= 1.0f;
+          }
+#endif
+          common_frameTime = 0.0f;
+
+          update(FIXED_DELTATIME);
+          render(FIXED_DELTATIME);
+        }
+        else {
+          render(0); 
+        }
 
 				// update screen from any rendering performed since this previous call
 				// as we don't use SDL_Surface now, we can't use SDL_UpdateWindowSurface
 				SDL_RenderPresent(gRenderer);
-
-        // increment frame count
-        frameCount++;
 			}
 		}
 	}
