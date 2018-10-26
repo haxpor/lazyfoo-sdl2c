@@ -22,9 +22,9 @@
 // -- functions
 bool init();
 bool setup();
-void update();
-void handleEvent(SDL_Event *e);
-void render();
+void update(float deltaTime);
+void handleEvent(SDL_Event *e, float deltaTime);
+void render(float deltaTime);
 void close();
 
 // -- variables
@@ -40,6 +40,12 @@ extern TTF_Font* gFont;
 
 // global texture for button
 LTexture* gTexture = NULL;
+
+// independent time loop
+Uint32 currTime = 0;
+Uint32 prevTime = 0;
+float frameTime = 0.0f;
+float avgFPS = 0.0f;
 
 bool init() {
 	// initialize sdl
@@ -105,12 +111,12 @@ bool setup()
 	return true;
 }
 
-void update()
+void update(float deltaTime)
 {
 	// nothing here for this sample.
 }
 
-void handleEvent(SDL_Event *e)
+void handleEvent(SDL_Event *e, float deltaTime)
 {
 	// user requests quit
 	if (e->type == SDL_QUIT)
@@ -129,11 +135,22 @@ void handleEvent(SDL_Event *e)
 	}
 }
 
-void render()
+void render(float deltaTime)
 {
 	// clear screen
 	SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
 	SDL_RenderClear(gRenderer);
+
+  frameTime += deltaTime;
+  if (frameTime >= 1.0f)
+  {
+    avgFPS = frameCount;
+    // reset framecount
+    frameCount = 0;
+    // reset frame time
+    frameTime -= 1.0f;
+  }
+  SDL_Log("avgFPS %.2f", avgFPS);
 }
 
 void close()
@@ -178,21 +195,30 @@ int main(int argc, char* args[])
 			// while application is running
 			while (!quit)
 			{
+        // prepare delta time to feed to handleEvent(), update() and render()
+        prevTime = currTime;
+        currTime = SDL_GetTicks();
+        // calculate per second
+        float deltaTime = (currTime = prevTime) / 1000.0f;
+        
 				// handle events on queue
 				// if it's 0, then it has no pending event
 				// we keep polling all event in each game loop until there is no more pending one left
 				while (SDL_PollEvent(&e) != 0)
 				{
 					// update user's handleEvent()
-					handleEvent(&e);
+					handleEvent(&e, deltaTime);
 				}
 
-				update();
-				render();			
+				update(deltaTime);
+				render(deltaTime);			
 
 				// update screen from any rendering performed since this previous call
 				// as we don't use SDL_Surface now, we can't use SDL_UpdateWindowSurface
 				SDL_RenderPresent(gRenderer);
+
+        // increment frame count
+        frameCount++;
 			}
 		}
 	}
