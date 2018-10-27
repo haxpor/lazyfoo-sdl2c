@@ -14,6 +14,7 @@ See _License_ for more information about rights.
 * Use `template.c`, and `template.gitignore` files to kickstart each sample.
 * `LTexture.c`, `LTexture.h`, `LButton.c`, `LButton.h`, `common.c`, `common.h` are gradually improved, refactored, and added more functionality on top from one sample to another. If you need a more updated version of it, look at the most recent sample.
 * Each individual sample is self-contained.
+* Use `createsample.sh` to kickstart creating a new sample directory based on existing one. See comment in the source file for detail how to use.
 
 # License
 
