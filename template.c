@@ -1,5 +1,5 @@
 /**
- * Template main source file
+ * Template for source file
  */
 
 #include <SDL2/SDL.h>
@@ -37,6 +37,12 @@ bool quit = false;
 // independent time loop
 Uint32 currTime = 0;
 Uint32 prevTime = 0;
+
+#ifndef DISABLE_FPS_CALC
+#define FPS_BUFFER 7+1
+char fpsText[FPS_BUFFER];
+#endif
+
 
 bool init() {
 	// initialize sdl
@@ -91,6 +97,14 @@ bool init() {
 // include any asset loading sequence, and preparation code here
 bool setup()
 {
+  // load font
+  gFont = TTF_OpenFont("../8bitwondor.ttf", 16);
+  if (gFont == NULL)
+  {
+    SDL_Log("Failed to load 8bitwonder.ttf font: %s", TTF_GetError());
+    return false;
+  }
+
 	return true;
 }
 
@@ -123,6 +137,22 @@ void render(float deltaTime)
   // clear screen
   SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
   SDL_RenderClear(gRenderer);
+
+#ifndef DISABLE_FPS_CALC
+  // render fps on the top right corner
+  snprintf(fpsText, FPS_BUFFER-1, "%d", (int)common_avgFPS);
+  
+  // generate fps texture
+  SDL_Color color = {30, 30, 30, 255};
+  LTexture *fpsTexture = LTexture_LoadFromRenderedText(fpsText, color, 0);
+  if (fpsTexture != NULL)
+  {
+    LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 0);
+
+    free(fpsTexture);
+    fpsTexture = NULL;
+  }
+#endif
 }
 
 void close()
