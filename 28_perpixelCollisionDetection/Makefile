@@ -3,12 +3,14 @@ OUTPUT=perpixelc
 
 CC = gcc
 EXE = .out
-CFLAGS = -std=c99 -Wall -I. -I/usr/local/include/SDL2
+CFLAGS = -std=c99 -Wall -I. -I/usr/local/include/SDL2 -g
 LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 TARGETS = \
 	  common.o \
+	  krr_math.o \
 	  LTexture.o \
 	  LTimer.o \
+	  Dot.o \
 	  $(PROGRAM).o \
 	  $(OUTPUT)
 
@@ -22,21 +24,29 @@ TARGETS_VECTOR_TEST = \
 	  vector_test.o \
 	  vector
 
-.PHONY: all clean vectorDot vector
+.PHONY: all clean vectorDot vector Dot krr_math
 
-all: $(TARGETS) $(TARGETS_VECTORDOT_TEST) $(TARGETS_VECTOR_TEST)
+all: $(TARGETS) 
 
-$(OUTPUT): $(PROGRAM).o LTexture.o common.o
-	$(CC) $(PROGRAM).o LTexture.o common.o LTimer.o -o $(OUTPUT)$(EXE) $(LIBS)
+vector_test: $(TARGETS_VECTORDOT_TEST) $(TARGETS_VECTOR_TEST)
+
+$(OUTPUT): $(PROGRAM).o LTexture.o common.o Dot.o krr_math.o
+	$(CC) $^ -o $(OUTPUT)$(EXE) $(LIBS)
 
 common.o: common.c common.h
-	$(CC) $(CFLAGS) -c common.c -o common.o
+	$(CC) $(CFLAGS) -c $<  -o $@
+
+krr_math.o: krr_math.c krr_math.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 LTexture.o: LTexture.c LTexture.h
-	$(CC) $(CFLAGS) -c LTexture.c -o LTexture.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 LTimer.o: LTimer.c LTimer.h
-	$(CC) $(CFLAGS) -c LTimer.c -o LTimer.o
+	$(CC) $(CFLAGS) -c $< -o $@
+
+Dot.o: Dot.c Dot.h common.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PROGRAM).o: $(PROGRAM).c
 	$(CC) $(CFLAGS) -c $(PROGRAM).c -o $(PROGRAM).o

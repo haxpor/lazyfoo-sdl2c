@@ -9,6 +9,11 @@ extern SDL_Renderer* gRenderer;
 
 LTexture* LTexture_LoadFromFile(const char* path)
 {
+  return LTexture_LoadFromFileWithColorKey(path, 0x00, 0xFF, 0xFF);
+}
+
+LTexture* LTexture_LoadFromFileWithColorKey(const char* path, Uint8 colorKeyRed, Uint8 colorKeyGreen, Uint8 colorKeyBlue)
+{
   // load image at specified path
   SDL_Surface* loadedSurface = IMG_Load(path);
   if (loadedSurface == NULL)
@@ -18,7 +23,7 @@ LTexture* LTexture_LoadFromFile(const char* path)
   }
 
   // color key image
-  SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+  SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, colorKeyRed, colorKeyGreen, colorKeyBlue));
 
   // create texture from surface
   SDL_Texture* newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);

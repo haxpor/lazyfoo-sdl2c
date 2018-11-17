@@ -25,9 +25,11 @@ typedef struct LTexture LTexture;
 /*
  * Load texture at the specified path.
  * out will be filled with newly created LTexture.
+ * colorKey.... is for color key for such texture
  * Return newly created LTexture as loaded from file.
  */
 extern LTexture* LTexture_LoadFromFile(const char* path);
+extern LTexture* LTexture_LoadFromFileWithColorKey(const char* path, Uint8 colorKeyRed, Uint8 colorKeyGreen, Uint8 colorKeyBlue);
 
 #ifndef DISABLE_SDL_TTF_LIB
 /*

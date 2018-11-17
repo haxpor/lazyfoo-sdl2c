@@ -10,7 +10,6 @@
 #include "LTexture.h"
 #include "LTimer.h"
 #include "Dot.h"
-#include "vectorDot.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -50,20 +49,13 @@ char fpsText[FPS_BUFFER];
 #define DOT_SPEED 200
 #define LERP_FACTOR 0.07
 
-Dot dot;
+// demonstrate Dot's API that can work with both stack or heap variables
+// for heap, you need to Dot_Free() to free internal memory and free() for your variable
+// anyway for Dot's API right now, there's no Dot_Free() but you get the idea
+Dot dotA;
+Dot* dotB = NULL;
 LTexture *dotTexture = NULL;
 SDL_Rect wall;
-
-/*
- * \brief Lerp from a to b for t.
- * \param a a value
- * \param b b value
- * \param t Values between 0.0-1.0 (inclusion)
- */
-float lerp(float a, float b, float t)
-{
-  return a + (b-a) * t;
-}
 
 bool init() {
   // initialize sdl
@@ -127,17 +119,17 @@ bool setup()
   }
 
   // load dot texture
-  dotTexture = LTexture_LoadFromFile("dot.bmp");
+  dotTexture = LTexture_LoadFromFileWithColorKey("dot.bmp", 0xFF, 0xFF, 0xFF);
   if (dotTexture == NULL)
   {
     SDL_Log("Failed to load dot.bmp: %s", SDL_GetError());
     return false;
   }
-  // set loaded texture to our dot
-  dot.texture = dotTexture;
-  // set up width and height of collider first (as of information we knew now)
-  dot.collider.w = dot.texture->width;
-  dot.collider.h = dot.texture->height;
+
+  // initialize dot
+  Dot_Init(&dotA, 50, 120, dotTexture);
+  dotB = malloc(sizeof(Dot));
+  Dot_Init(dotB, 120, 120, dotTexture);
 
   // wall
   wall.x = 300;
@@ -148,51 +140,16 @@ bool setup()
   return true;
 }
 
-/*
- * \brief Check collision between collision boxes.
- * \param a Collision box a to check collision
- * \param b Collision box b to check collision
- * \return True if collision occurs, otherwise return false.
- */
-bool checkCollision(SDL_Rect a, SDL_Rect b)
-{
-  if (a.x + a.w > b.x &&
-      a.y + a.h > b.y &&
-      b.x + b.w > a.x &&
-      b.y + b.h > a.y)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
 void update(float deltaTime)
 {
-  // lerp on velocity
-  dot.velX = lerp(dot.velX, dot.targetVelX, LERP_FACTOR);
-  dot.velY = lerp(dot.velY, dot.targetVelY, LERP_FACTOR);
-  // calculate the final position
-  dot.posX += dot.velX;
-  dot.posY += dot.velY;
-  dot.collider.x = dot.posX;
-  dot.collider.y = dot.posY;
+  // update position of itself
+  Dot_Update(&dotA, deltaTime);
+  // update collision checking against dotB
+  Dot_UpdateCollisions(&dotA, dotB->colliders, 11);
+  // update collision checking against wall
+  Dot_UpdateCollisions(&dotA, &wall, 1);
 
-  // bound position
-  if (dot.posX < 0 || dot.posX + dot.texture->width > SCREEN_WIDTH || checkCollision(dot.collider, wall))
-  {
-    // move back
-    dot.posX -= dot.velX;
-    dot.collider.x = dot.posX;
-  }
-  if (dot.posY < 0 || dot.posY + dot.texture->height > SCREEN_HEIGHT || checkCollision(dot.collider, wall))
-  {
-    // move back
-    dot.posY -= dot.velY;
-    dot.collider.y = dot.posY;
-  }
+  Dot_Update(dotB, deltaTime);
 }
 
 void handleEvent(SDL_Event *e, float deltaTime)
@@ -219,16 +176,16 @@ void handleEvent(SDL_Event *e, float deltaTime)
     switch (e->key.keysym.sym)
     {
       case SDLK_UP:
-        dot.targetVelY -= DOT_SPEED * deltaTime;
+        dotA.targetVelY -= DOT_SPEED * deltaTime;
         break;
       case SDLK_DOWN:
-        dot.targetVelY += DOT_SPEED * deltaTime;
+        dotA.targetVelY += DOT_SPEED * deltaTime;
         break;
       case SDLK_LEFT:
-        dot.targetVelX -= DOT_SPEED * deltaTime;
+        dotA.targetVelX -= DOT_SPEED * deltaTime;
         break;
       case SDLK_RIGHT:
-        dot.targetVelX += DOT_SPEED * deltaTime;
+        dotA.targetVelX += DOT_SPEED * deltaTime;
         break;
     }
   }
@@ -237,16 +194,16 @@ void handleEvent(SDL_Event *e, float deltaTime)
     switch (e->key.keysym.sym)
     {
       case SDLK_UP:
-        dot.targetVelY += DOT_SPEED * deltaTime;
+        dotA.targetVelY += DOT_SPEED * deltaTime;
         break;
       case SDLK_DOWN:
-        dot.targetVelY -= DOT_SPEED * deltaTime;
+        dotA.targetVelY -= DOT_SPEED * deltaTime;
         break;
       case SDLK_LEFT:
-        dot.targetVelX += DOT_SPEED * deltaTime;
+        dotA.targetVelX += DOT_SPEED * deltaTime;
         break;
       case SDLK_RIGHT:
-        dot.targetVelX -= DOT_SPEED * deltaTime;
+        dotA.targetVelX -= DOT_SPEED * deltaTime;
         break;
     }
   }
@@ -278,8 +235,9 @@ void render(float deltaTime)
   SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderDrawRect(gRenderer, &wall);
 
-  // render dot
-  LTexture_Render(dot.texture, dot.posX, dot.posY);
+  // render dots
+  Dot_Render(&dotA);
+  Dot_Render(dotB);
 }
 
 void close()
@@ -296,6 +254,10 @@ void close()
   {
     LTexture_Free(dotTexture);
   }
+
+  // free dotB
+  free(dotB);
+  dotB = NULL;
 
   // destroy window
   SDL_DestroyRenderer(gRenderer);
