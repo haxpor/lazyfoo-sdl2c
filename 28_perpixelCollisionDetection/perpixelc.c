@@ -225,8 +225,7 @@ void render(float deltaTime)
   if (fpsTexture != NULL)
   {
     LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 0);
-
-    free(fpsTexture);
+    LTexture_Free(fpsTexture);
     fpsTexture = NULL;
   }
 #endif

@@ -3,8 +3,8 @@ OUTPUT=perpixelc
 
 CC = gcc
 EXE = .out
-CFLAGS = -std=c99 -Wall -I. -I/usr/local/include/SDL2 -g
-LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+override CFLAGS += -std=c99 -Wall -I. -I/usr/local/include/SDL2
+override LIBS += -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 TARGETS = \
 	  common.o \
 	  krr_math.o \
