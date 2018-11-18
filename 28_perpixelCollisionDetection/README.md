@@ -12,3 +12,9 @@ As well for standalone vector that is detached from SDL2, take a look at [haxpor
 To test how vector works,
 
 use `make vectorDot` and `make vector` to build `vectorDot` and `vector` executable files.
+
+# Build sample code
+
+Use `make` to build but it will include `assert` in the build.
+
+To not include it, use `make CFLAGS=-DNDEBUG`. You can check result executable file with `objdump -t <file.out> | grep assert` to see whether `assert` symbol is included in the binary file or not.

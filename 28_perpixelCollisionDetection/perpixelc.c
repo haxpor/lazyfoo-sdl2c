@@ -57,6 +57,41 @@ Dot* dotB = NULL;
 LTexture *dotTexture = NULL;
 SDL_Rect wall;
 
+// screenbounder system
+typedef struct {
+  bool (*f)(Dot*);  
+} BoundSystem;
+BoundSystem boundSystem;
+int screenWidth;
+int screenHeight;
+
+// bound Dot against screen
+// prior to this call screenWidth and screenHeight need to be set to current window size
+bool screenBoundDot(Dot* dot)
+{
+  bool collided = false;
+
+  if (dot->posX < 0 || dot->posX + dot->texture->width > screenWidth)
+  {
+    // move back
+    dot->posX -= dot->velX;
+    Dot_ShiftColliders(dot);
+
+    collided = true;
+  }
+
+  if (dot->posY < 0 || dot->posY + dot->texture->height > screenHeight)
+  {
+    // move back
+    dot->posY -= dot->velY;
+    Dot_ShiftColliders(dot);
+
+    collided = true;
+  }
+
+  return collided;
+}
+
 bool init() {
   // initialize sdl
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -137,6 +172,11 @@ bool setup()
   wall.w = 40;
   wall.h = 400;
 
+  // get window size
+  SDL_GetWindowSize(gWindow, &screenWidth, &screenHeight);
+  // setup bound system
+  boundSystem.f = screenBoundDot;
+
   return true;
 }
 
@@ -145,9 +185,12 @@ void update(float deltaTime)
   // update position of itself
   Dot_Update(&dotA, deltaTime);
   // update collision checking against dotB
-  Dot_UpdateCollisions(&dotA, dotB->colliders, 11);
+  Dot_UpdateCollisions(&dotA, dotB->colliders, 11, &dotB->roughCollider);
   // update collision checking against wall
-  Dot_UpdateCollisions(&dotA, &wall, 1);
+  Dot_UpdateCollision(&dotA, &wall);
+
+  // bound dotA against screen
+  boundSystem.f(&dotA);
 
   Dot_Update(dotB, deltaTime);
 }

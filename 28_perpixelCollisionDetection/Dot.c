@@ -1,5 +1,6 @@
 #include "Dot.h"
 #include "common.h"
+#include "common_debug.h"
 #include "krr_math.h"
 
 void Dot_Init(Dot* dot, int x, int y, LTexture* texture)
@@ -17,6 +18,12 @@ void Dot_Init(Dot* dot, int x, int y, LTexture* texture)
 
   // set loaded texture (from elsewhere)
   dot->texture = texture;
+
+  // set rough collider to be the same size of of texture
+  // this will be used internally before checking fine-grained collision checking with
+  // colliders
+  dot->roughCollider.w = dot->texture->width;
+  dot->roughCollider.h = dot->texture->height;
   
   // set fine-grain detail of colliders of Dot
   // take a look at dot.bmp and inspect rectangles that could form as dot as a result
@@ -69,17 +76,14 @@ void Dot_Update(Dot* dot, float deltaTime)
   Dot_ShiftColliders(dot);
 }
 
-bool Dot_UpdateCollisions(Dot* dot, SDL_Rect* otherColliders, int numOtherColliders)
+bool Dot_UpdateCollision(Dot* dot, const SDL_Rect* const otherRoughCollider)
 {
-  // bound position
-  int w;
-  int h;
-  SDL_GetWindowSize(gWindow, &w, &h);
+  assert(otherRoughCollider != NULL);
 
   // result of collision
   bool collided = false;
   
-  if (dot->posX < 0 || dot->posX + dot->texture->width > w || (otherColliders != NULL && krr_math_checkCollisions(dot->colliders, 11, otherColliders, numOtherColliders)))
+  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider))
   {
     // move back
     dot->posX -= dot->velX;
@@ -87,7 +91,36 @@ bool Dot_UpdateCollisions(Dot* dot, SDL_Rect* otherColliders, int numOtherCollid
 
     collided = true;
   }
-  if (dot->posY < 0 || dot->posY + dot->texture->height > h || (otherColliders != NULL && krr_math_checkCollisions(dot->colliders, 11, otherColliders, numOtherColliders)))
+  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider))
+  {
+    // move back
+    dot->posY -= dot->velY;
+    Dot_ShiftColliders(dot);
+
+    collided = true;
+  }
+
+  return collided;
+}
+
+bool Dot_UpdateCollisions(Dot* dot, SDL_Rect* otherColliders, int numOtherColliders, const SDL_Rect* const otherRoughCollider)
+{
+  assert(otherRoughCollider != NULL);
+  assert(otherColliders != NULL);
+  assert(numOtherColliders > 0);
+
+  // result of collision
+  bool collided = false;
+  
+  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider) && otherColliders != NULL && krr_math_checkCollisions(dot->colliders, 11, otherColliders, numOtherColliders))
+  {
+    // move back
+    dot->posX -= dot->velX;
+    Dot_ShiftColliders(dot);
+
+    collided = true;
+  }
+  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider) && otherColliders != NULL && krr_math_checkCollisions(dot->colliders, 11, otherColliders, numOtherColliders))
   {
     // move back
     dot->posY -= dot->velY;
@@ -101,6 +134,10 @@ bool Dot_UpdateCollisions(Dot* dot, SDL_Rect* otherColliders, int numOtherCollid
 
 void Dot_ShiftColliders(Dot* dot)
 {
+  // shift rough collider
+  dot->roughCollider.x = dot->posX + (dot->texture->width - dot->roughCollider.w) / 2;
+  dot->roughCollider.y = dot->posY;
+
   // the row offset
   int r = 0;
 
