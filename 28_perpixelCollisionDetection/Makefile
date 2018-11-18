@@ -48,7 +48,7 @@ LTimer.o: LTimer.c LTimer.h
 Dot.o: Dot.c Dot.h common.o
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(PROGRAM).o: $(PROGRAM).c
+$(PROGRAM).o: $(PROGRAM).c krr_math.c LTexture.c LTimer.c Dot.c
 	$(CC) $(CFLAGS) -c $(PROGRAM).c -o $(PROGRAM).o
 
 vectorDot.o: vectorDot.c Dot.h common_debug.h
