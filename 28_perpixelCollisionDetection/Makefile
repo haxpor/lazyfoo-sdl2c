@@ -58,7 +58,7 @@ vectorDot_test.o: vectorDot_test.c vectorDot.h Dot.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 vectorDot: vectorDot.o vectorDot_test.o
-	$(CC) $^ -o $@  $(LIBS)
+	$(CC) $^ -o $@$(EXE)  $(LIBS)
 
 vector.o: vector.c common_debug.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -67,7 +67,7 @@ vector_test.o: vector_test.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 vector: vector.o vector_test.o
-	$(CC) $^ -o $@
+	$(CC) $^ -o $@$(EXE)
 
 clean:
 	rm -rf *.out *.o *.dSYM
