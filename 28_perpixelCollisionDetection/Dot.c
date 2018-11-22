@@ -82,19 +82,15 @@ bool Dot_UpdateCollision(Dot* dot, const SDL_Rect* const otherRoughCollider)
 
   // result of collision
   bool collided = false;
-  
-  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider))
-  {
-    // move back
-    dot->posX -= dot->velX;
-    Dot_ShiftColliders(dot);
 
-    collided = true;
-  }
-  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider))
+  int deltaCollisionX = 0;
+  int deltaCollisionY = 0;
+  
+  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider, &deltaCollisionX, &deltaCollisionY))
   {
-    // move back
-    dot->posY -= dot->velY;
+    // move back both axis
+    dot->posX -= deltaCollisionX;
+    dot->posY -= deltaCollisionY;
     Dot_ShiftColliders(dot);
 
     collided = true;
@@ -111,22 +107,21 @@ bool Dot_UpdateCollisions(Dot* dot, SDL_Rect* otherColliders, int numOtherCollid
 
   // result of collision
   bool collided = false;
+
+  int deltaCollisionX = 0;
+  int deltaCollisionY = 0;
   
-  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider) && otherColliders != NULL && krr_math_checkCollisions(dot->colliders, 11, otherColliders, numOtherColliders))
+  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider, NULL, NULL) && otherColliders != NULL)
   {
-    // move back
-    dot->posX -= dot->velX;
-    Dot_ShiftColliders(dot);
+    if ( krr_math_checkCollisions(dot->colliders, 11, otherColliders, numOtherColliders, &deltaCollisionX, &deltaCollisionY))
+    {
+      // move back both axis
+      dot->posX -= deltaCollisionX;
+      dot->posY -= deltaCollisionY;
+      Dot_ShiftColliders(dot);
 
-    collided = true;
-  }
-  if (krr_math_checkCollision(dot->roughCollider, *otherRoughCollider) && otherColliders != NULL && krr_math_checkCollisions(dot->colliders, 11, otherColliders, numOtherColliders))
-  {
-    // move back
-    dot->posY -= dot->velY;
-    Dot_ShiftColliders(dot);
-
-    collided = true;
+      collided = true;
+    }
   }
 
   return collided;
