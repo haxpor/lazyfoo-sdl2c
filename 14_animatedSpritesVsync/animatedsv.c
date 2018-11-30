@@ -32,6 +32,15 @@ const int kWalkingAnimationFrames = 4;
 SDL_Rect gAnimationFrames[kWalkingAnimationFrames];
 LTexture gSpriteSheetTexture;
 
+float accum_anim_time = 0;
+Uint32 prev_time = 0;
+Uint32 curr_time = 0;
+
+// increase this number to make animation plays faster
+const int fAnim_fps = 10;
+// cache the calculation of animation speed
+const float kAnim_frame_delay = 1.0 / fAnim_fps;
+
 bool init() {
   // initialize sdl
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -138,6 +147,11 @@ int main(int argc, char* args[])
       // while application is running
       while (!quit)
       {
+        // get elapsed time between frame
+        prev_time = curr_time;
+        curr_time = SDL_GetTicks();
+        float deltaTime = (curr_time - prev_time) / 1000.0f;
+
         // handle events on queue
         // if it's 0, then it has no pending event
         // we keep polling all event in each game loop until there is no more pending one left
@@ -165,7 +179,7 @@ int main(int argc, char* args[])
         SDL_RenderClear(gRenderer);
 
         // render walk animation
-        SDL_Rect* currentFrame = &gAnimationFrames[frame/4];
+        SDL_Rect* currentFrame = &gAnimationFrames[frame];
         LTexture_ClippedRender(&gSpriteSheetTexture, (SCREEN_WIDTH - currentFrame->w)/2, (SCREEN_HEIGHT - currentFrame->h)/2, currentFrame);
 
         // update screen from any rendering performed since this previous call
@@ -173,12 +187,13 @@ int main(int argc, char* args[])
         SDL_RenderPresent(gRenderer);
 
         // go to next frame
-        ++frame;
-
-        // cycle animation
-        if (frame / 4 >= kWalkingAnimationFrames)
+        accum_anim_time += deltaTime;
+        SDL_Log("accum %f", accum_anim_time);
+        if (accum_anim_time >= kAnim_frame_delay)
         {
-          frame = 0;
+          frame = (frame + 1) % 4;
+          SDL_Log("increased frame to %d", frame);
+          accum_anim_time -= kAnim_frame_delay;
         }
       }
     }
