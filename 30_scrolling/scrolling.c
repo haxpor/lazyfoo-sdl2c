@@ -232,6 +232,8 @@ void render(float deltaTime)
   SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
   SDL_RenderClear(gRenderer);
 
+  LTexture_Render(bgTexture, -cam.view_rect.x, -cam.view_rect.y);
+
 #ifndef DISABLE_FPS_CALC
   // render fps on the top right corner
   snprintf(fpsText, FPS_BUFFER-1, "%d", (int)common_avgFPS);
@@ -242,13 +244,10 @@ void render(float deltaTime)
   if (fpsTexture != NULL)
   {
     LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 0);
-
-    free(fpsTexture);
-    fpsTexture = NULL;
+    LTexture_Free(fpsTexture);
   }
 #endif
 
-  LTexture_Render(bgTexture, -cam.view_rect.x, -cam.view_rect.y);
   Dot_Render_w_camera(&dot, cam.view_rect.x, cam.view_rect.y);
 }
 
