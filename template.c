@@ -206,15 +206,6 @@ int main(int argc, char* args[])
         // calculate per second
         float deltaTime = (currTime - prevTime) / 1000.0f;
 
-        // handle events on queue
-        // if it's 0, then it has no pending event
-        // we keep polling all event in each game loop until there is no more pending one left
-        while (SDL_PollEvent(&e) != 0)
-        {
-          // update user's handleEvent()
-          handleEvent(&e, deltaTime);
-        }
-
 #ifndef DISABLE_FPS_CALC
         // fixed step
         common_frameTime += deltaTime;
@@ -234,6 +225,15 @@ int main(int argc, char* args[])
           }
 #endif
           common_frameTime = 0.0f;
+
+          // handle events on queue
+          // if it's 0, then it has no pending event
+          // we keep polling all event in each game loop until there is no more pending one left
+          while (SDL_PollEvent(&e) != 0)
+          {
+            // update user's handleEvent()
+            handleEvent(&e, FIXED_DELTATIME);
+          }
 
           update(FIXED_DELTATIME);
           render(FIXED_DELTATIME);
