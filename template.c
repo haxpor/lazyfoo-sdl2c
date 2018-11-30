@@ -2,7 +2,7 @@
  * Template for source file
  */
 
-#include <SDL2/SDL.h>
+#include "SDL.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include "common.h"
