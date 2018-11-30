@@ -47,7 +47,6 @@ char fpsText[FPS_BUFFER];
 
 // speed per second
 #define DOT_SPEED 200
-#define LERP_FACTOR 0.07
 
 // demonstrate Dot's API that can work with both stack or heap variables
 // for heap, you need to Dot_Free() to free internal memory and free() for your variable
