@@ -98,10 +98,10 @@ bool init() {
 bool setup()
 {
   // load font
-  gFont = TTF_OpenFont("../8bitwondor.ttf", 16);
+  gFont = TTF_OpenFont("../Minecraft.ttf", 16);
   if (gFont == NULL)
   {
-    SDL_Log("Failed to load 8bitwonder.ttf font: %s", TTF_GetError());
+    SDL_Log("Failed to load Minecraft.ttf font: %s", TTF_GetError());
     return false;
   }
 
@@ -147,7 +147,7 @@ void render(float deltaTime)
   LTexture *fpsTexture = LTexture_LoadFromRenderedText(fpsText, color, 0);
   if (fpsTexture != NULL)
   {
-    LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 0);
+    LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 10);
     LTexture_Free(fpsTexture);
   }
 #endif
