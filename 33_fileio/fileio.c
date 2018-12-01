@@ -55,6 +55,7 @@ LTexture* data_textures[TOTAL_DATA];
 int active_data_index = 0;
 
 LTexture* hint_texture = NULL;
+LTexture* hint2_texture = NULL;
 
 // maximum characters for longest char possibilitndley
 char temp_num_chrs[11];
@@ -171,10 +172,18 @@ bool setup()
   }
 
   // hint texture
-  hint_texture = LTexture_LoadFromRenderedText_withFont("Enter data", custom_font, normal_text_color, SCREEN_WIDTH-10);
+  hint_texture = LTexture_LoadFromRenderedText_withFont("Enter data:", custom_font, normal_text_color, SCREEN_WIDTH-10);
   if (hint_texture == NULL)
   {
     SDL_Log("Failed to generate hint texture: %s", SDL_GetError());
+    return false;
+  }
+  // hint2 texture
+  SDL_Color hint_text_color = {128, 128, 128, 0xff};
+  hint2_texture = LTexture_LoadFromRenderedText_withFont("Use Up/Down to switch between data. Use Left/Right to decrement/increment value.", custom_font, hint_text_color, SCREEN_WIDTH*0.7);
+  if (hint2_texture == NULL)
+  {
+    SDL_Log("Failed to generate hint2 texture: %s", SDL_GetError());
     return false;
   }
 
@@ -322,6 +331,7 @@ void render(float deltaTime)
       LTexture_Render(data_textures[i], SCREEN_WIDTH/2-data_textures[i]->width/2, 10 + hint_texture->height + 10 + i*hint_texture->height);
     }
   }
+  LTexture_Render(hint2_texture, SCREEN_WIDTH/2-hint2_texture->width/2, SCREEN_HEIGHT-10-hint2_texture->height);
 }
 
 void close()
@@ -361,6 +371,8 @@ void close()
 
   if (hint_texture != NULL)
     LTexture_Free(hint_texture);
+  if (hint2_texture != NULL)
+    LTexture_Free(hint2_texture);
   for (int i=0; i<TOTAL_DATA; i++)
   {
     if (data_textures[i] != NULL)
