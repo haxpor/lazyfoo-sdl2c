@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "common.h"
+#include "LWindow.h"
 #include "LTexture.h"
 #include "LTimer.h"
 
@@ -52,7 +53,7 @@ bool init() {
   }
 
   // create window
-  gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  gWindow = LWindow_new("SDL Tutorial", SCREEN_WIDTH, SCREEN_HEIGHT, 0);
   if (gWindow == NULL) {
     SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
     return false;
@@ -61,7 +62,7 @@ bool init() {
   // create renderer for window
   // as we use SDL_Texture, now we need to use renderer to render stuff
   // also use vsync to cap framerate to what video card can do
-  gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+  gRenderer = SDL_CreateRenderer(gWindow->window, -1, SDL_RENDERER_ACCELERATED);
   if (gRenderer == NULL)
   {
     SDL_Log("SDL could not create renderer! SDL_Error: %s", SDL_GetError());
@@ -164,8 +165,7 @@ void close()
 
   // destroy window
   SDL_DestroyRenderer(gRenderer);
-  SDL_DestroyWindow(gWindow);
-  gWindow = NULL;
+  LWindow_free(gWindow);
   gRenderer = NULL;
 
 #ifndef DISABLE_SDL_TTF_LIB
