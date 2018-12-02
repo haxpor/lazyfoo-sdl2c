@@ -37,7 +37,7 @@ LTimer.o: LTimer.c LTimer.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PROGRAM).o: $(PROGRAM).c
-	$(CC) $(CFLAGS) -c $(PROGRAM).c -o $(PROGRAM).o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -rf *.out *.o *.dSYM
