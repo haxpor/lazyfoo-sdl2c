@@ -53,19 +53,9 @@ bool init() {
   }
 
   // create window
-  gWindow = LWindow_new("SDL Tutorial", SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+  gWindow = LWindow_new("SDL Tutorial", SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
   if (gWindow == NULL) {
     SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
-    return false;
-  }
-
-  // create renderer for window
-  // as we use SDL_Texture, now we need to use renderer to render stuff
-  // also use vsync to cap framerate to what video card can do
-  gRenderer = SDL_CreateRenderer(gWindow->window, -1, SDL_RENDERER_ACCELERATED);
-  if (gRenderer == NULL)
-  {
-    SDL_Log("SDL could not create renderer! SDL_Error: %s", SDL_GetError());
     return false;
   }
 
@@ -135,11 +125,11 @@ void handleEvent(SDL_Event *e, float deltaTime)
 
 void render(float deltaTime)
 {
-  if (!window->is_minimized)
+  if (!gWindow->is_minimized)
   {
     // clear screen
-    SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
-    SDL_RenderClear(gRenderer);
+    SDL_SetRenderDrawColor(gWindow->renderer, 0xff, 0xff, 0xff, 0xff);
+    SDL_RenderClear(gWindow->renderer);
 
 #ifndef DISABLE_FPS_CALC
     // render fps on the top right corner
@@ -167,9 +157,7 @@ void close()
   }
 
   // destroy window
-  SDL_DestroyRenderer(gRenderer);
   LWindow_free(gWindow);
-  gRenderer = NULL;
 
 #ifndef DISABLE_SDL_TTF_LIB
   TTF_Quit();
@@ -245,7 +233,7 @@ int main(int argc, char* args[])
 
         // update screen from any rendering performed since this previous call
         // as we don't use SDL_Surface now, we can't use SDL_UpdateWindowSurface
-        SDL_RenderPresent(gRenderer);
+        SDL_RenderPresent(gWindow->renderer);
       }
     }
   }
