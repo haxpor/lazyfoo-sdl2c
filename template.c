@@ -135,23 +135,26 @@ void handleEvent(SDL_Event *e, float deltaTime)
 
 void render(float deltaTime)
 {
-  // clear screen
-  SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
-  SDL_RenderClear(gRenderer);
+  if (!window->is_minimized)
+  {
+    // clear screen
+    SDL_SetRenderDrawColor(gRenderer, 0xff, 0xff, 0xff, 0xff);
+    SDL_RenderClear(gRenderer);
 
 #ifndef DISABLE_FPS_CALC
-  // render fps on the top right corner
-  snprintf(fpsText, FPS_BUFFER-1, "%d", (int)common_avgFPS);
+    // render fps on the top right corner
+    snprintf(fpsText, FPS_BUFFER-1, "%d", (int)common_avgFPS);
 
-  // generate fps texture
-  SDL_Color color = {30, 30, 30, 255};
-  LTexture *fpsTexture = LTexture_LoadFromRenderedText(fpsText, color, 0);
-  if (fpsTexture != NULL)
-  {
-    LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 10);
-    LTexture_Free(fpsTexture);
-  }
+    // generate fps texture
+    SDL_Color color = {30, 30, 30, 255};
+    LTexture *fpsTexture = LTexture_LoadFromRenderedText(fpsText, color, 0);
+    if (fpsTexture != NULL)
+    {
+      LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 10);
+      LTexture_Free(fpsTexture);
+    }
 #endif
+  }
 }
 
 void close()
