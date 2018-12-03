@@ -44,6 +44,8 @@ Uint32 prevTime = 0;
 char fpsText[FPS_BUFFER];
 #endif
 
+// content's rect to clear color in render loop
+SDL_Rect content_rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 bool init() {
   // initialize sdl
@@ -57,6 +59,11 @@ bool init() {
   if (gWindow == NULL) {
     SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
     return false;
+  }
+  // set device indepenent resolution for rendering (so no unproper aspect ratio)
+  if (SDL_RenderSetLogicalSize(gWindow->renderer, SCREEN_WIDTH, SCREEN_HEIGHT) < 0)
+  {
+    SDL_Log("Warning: failed to set logical size of window");
   }
 
   // initialize png loading
@@ -107,18 +114,31 @@ void update(float deltaTime)
 void handleEvent(SDL_Event *e, float deltaTime)
 {
   // user requests quit
-  if (e->type == SDL_QUIT)
+  if (e->type == SDL_QUIT ||
+      (e->key.keysym.sym == SDLK_ESCAPE))
   {
     quit = true;
   }
-  // user presses a key
-  else if (e->type == SDL_KEYDOWN)
+  // toggle fullscreen via enter key
+  else if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_RETURN)
   {
-    switch (e->key.keysym.sym)
+    if (gWindow->_fullscreen)
     {
-      case SDLK_ESCAPE:
-        quit = true;
-        break;
+      // 0 for windowed mode
+      SDL_SetWindowFullscreen(gWindow->window, 0);
+      gWindow->_fullscreen = false;
+    }
+    else
+    {
+      // SDL_WINDOW_FULLSCREEN_DESKTOP for "fake" fullscreen without changing videomode
+      // depends on type of game, and performance aim i.e. FPS game might want to do "real" fullscreen
+      // by changing videomode to get performance gain, but point and click with top-down tile-based
+      // might not need to change videomode to match the desire spec.
+      //
+      // as well this needs to work with SDL_RenderSetLogicalSize() function to make it works.
+      SDL_SetWindowFullscreen(gWindow->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+      gWindow->_fullscreen = true;
+      gWindow->is_minimized = false;
     }
   }
 }
@@ -127,9 +147,13 @@ void render(float deltaTime)
 {
   if (!gWindow->is_minimized)
   {
-    // clear screen
-    SDL_SetRenderDrawColor(gWindow->renderer, 0xff, 0xff, 0xff, 0xff);
+    // clear screen (bg)
+    SDL_SetRenderDrawColor(gWindow->renderer, 0, 0, 0, 0xff);
     SDL_RenderClear(gWindow->renderer);
+
+    // clear screen (content)
+    SDL_SetRenderDrawColor(gWindow->renderer, 0xff, 0xff, 0xff, 0xff);
+    SDL_RenderFillRect(gWindow->renderer, &content_rect);
 
 #ifndef DISABLE_FPS_CALC
     // render fps on the top right corner
