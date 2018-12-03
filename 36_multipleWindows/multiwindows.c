@@ -252,7 +252,9 @@ void close()
     gFont = NULL;
   }
 
-  // destroy window
+  // free main window
+  LWindow_free(gWindow);
+  // free additional windows
   for (int i=0; i<ADDITIONAL_WINDOWS; i++)
   {
     LWindow_free_internals(&windows[i]);
