@@ -10,6 +10,9 @@ static void init_defaults(ParticleGroup* pg)
 
   // default of particle's configuations as follows
   // users are freely to configure them
+  pg->start_particle_mass = 1;
+  pg->end_particle_mass = 1;
+
   pg->start_particle_offsetx = 5;
   pg->end_particle_offsetx = 7;
 

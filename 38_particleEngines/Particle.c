@@ -3,6 +3,7 @@
 
 static void init_default(Particle* p)
 {
+  p->mass = 1;
   p->x = 0;
   p->y = 0;
   p->velx = 0;
@@ -45,6 +46,7 @@ bool Particle_init(Particle* p, int x, int y)
 void Particle_reset(Particle* p)
 {
   // reset making this particle not dead
+  p->mass = 1;
   p->x = 0;
   p->y = 0;
   p->velx = 0;

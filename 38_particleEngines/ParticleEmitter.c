@@ -46,6 +46,7 @@ bool ParticleEmitter_init(ParticleEmitter* emitter, ParticleGroup* pg, int num_p
     // init particle
     Particle_init(particles + i, krr_math_rand_int2(pg->start_particle_offsetx, pg->end_particle_offsetx), krr_math_rand_int2(pg->start_particle_offsety, pg->end_particle_offsety));
     // set its other attributes randomly
+    particles[i].mass = krr_math_rand_int2(pg->start_particle_mass, pg->end_particle_mass);
     particles[i].velx = krr_math_rand_float2(pg->start_particle_velx, pg->end_particle_velx);
     particles[i].vely = krr_math_rand_float2(pg->start_particle_vely, pg->end_particle_vely);
     particles[i].accx = krr_math_rand_float2(pg->start_particle_accx, pg->end_particle_accx);
@@ -83,6 +84,7 @@ void ParticleEmitter_update(ParticleEmitter* emitter, float delta_time)
 
       p->x = krr_math_rand_int2(pg->start_particle_offsetx, pg->end_particle_offsetx);
       p->y = krr_math_rand_int2(pg->start_particle_offsety, pg->end_particle_offsety);
+      p->mass = krr_math_rand_int2(pg->start_particle_mass, pg->end_particle_mass);
       p->velx = krr_math_rand_float2(pg->start_particle_velx, pg->end_particle_velx);
       p->vely = krr_math_rand_float2(pg->start_particle_vely, pg->end_particle_vely);
       p->accx = krr_math_rand_float2(pg->start_particle_accx, pg->end_particle_accx);
@@ -117,6 +119,24 @@ void ParticleEmitter_update(ParticleEmitter* emitter, float delta_time)
       {
         p->is_dead = true;
       }
+    }
+  }
+}
+
+void ParticleEmitter_apply_force(ParticleEmitter* emitter, int force_x, int force_y)
+{
+  Particle* p = NULL;
+
+  for (int i=0; i<emitter->num_particles; i++)
+  {
+    // get particle
+    p = emitter->particles + i;
+
+    // if particle is not dead yet, then apply force
+    if (!p->is_dead)
+    {
+      p->accx += force_x / p->mass;
+      p->accy += force_y / p->mass;
     }
   }
 }

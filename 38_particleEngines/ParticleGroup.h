@@ -27,6 +27,10 @@ typedef struct {
   /// (read-only) managed internally to cache delay value for animation speed
   float anim_delay;
 
+  /// mass of particle
+  int start_particle_mass;
+  int end_particle_mass;
+
   /// offset position x
   int start_particle_offsetx;
   int end_particle_offsetx;

@@ -8,6 +8,9 @@
 /// Particle handles individual particle.
 ///
 typedef struct {
+  /// mass
+  int mass;
+
   /// pos x
   int x;
   /// pos y

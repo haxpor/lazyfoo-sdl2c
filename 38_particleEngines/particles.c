@@ -120,6 +120,10 @@ bool setup()
 
   // particle group
   particle_group = ParticleGroup_new(particles_texture, particles_texture->width/4, particles_texture->height, 1, 3, 10);
+
+  particle_group->start_particle_mass = 5;
+  particle_group->end_particle_mass = 10;
+
   particle_group->start_particle_offsetx = -30;
   particle_group->end_particle_offsetx = 30;
 
@@ -182,6 +186,16 @@ void handleEvent(SDL_Event *e, float deltaTime)
       gWindow->_fullscreen = true;
       gWindow->is_minimized = false;
     }
+  }
+  // apply force (wind) from right to left
+  else if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_LEFT)
+  {
+    ParticleEmitter_apply_force(particle_emitter, 30, 0);
+  }
+  // apply force (wind) from left to right
+  else if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_RIGHT)
+  {
+    ParticleEmitter_apply_force(particle_emitter, -30, 0);
   }
 }
 

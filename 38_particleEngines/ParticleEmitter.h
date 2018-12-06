@@ -62,6 +62,15 @@ extern bool ParticleEmitter_init(ParticleEmitter* emitter, ParticleGroup* pg, in
 extern void ParticleEmitter_update(ParticleEmitter* emitter, float delta_time);
 
 ///
+/// Apply force to all particles.
+///
+/// \param emitter ParticleEmitter
+/// \param force_x Force to apply in x direction
+/// \param force_y Force to apply in y direction
+///
+extern void ParticleEmitter_apply_force(ParticleEmitter* emitter, int force_x, int force_y);
+
+///
 /// Render particles managed by ParticleEmitter
 ///
 /// \param emitter ParticleEmitter to render
