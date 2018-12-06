@@ -51,7 +51,8 @@ bool ParticleEmitter_init(ParticleEmitter* emitter, ParticleGroup* pg, int num_p
     particles[i].accx = krr_math_rand_float2(pg->start_particle_accx, pg->end_particle_accx);
     particles[i].accy = krr_math_rand_float2(pg->start_particle_accy, pg->end_particle_accy);
     particles[i].scale = krr_math_rand_float2(pg->start_particle_scale, pg->end_particle_scale);
-    particles[i].lifetime = krr_math_rand_float2(pg->start_particle_lifetime, pg->end_particle_lifetime);
+    particles[i].original_lifetime = krr_math_rand_float2(pg->start_particle_lifetime, pg->end_particle_lifetime);
+    particles[i].lifetime = particles[i].lifetime;
   }
 
   // set particles to emitter
@@ -87,7 +88,8 @@ void ParticleEmitter_update(ParticleEmitter* emitter, float delta_time)
       p->accx = krr_math_rand_float2(pg->start_particle_accx, pg->end_particle_accx);
       p->accy = krr_math_rand_float2(pg->start_particle_accy, pg->end_particle_accy);
       p->scale = krr_math_rand_float2(pg->start_particle_scale, pg->end_particle_scale);
-      p->lifetime = krr_math_rand_float2(pg->start_particle_lifetime, pg->end_particle_lifetime);     
+      p->original_lifetime = krr_math_rand_float2(pg->start_particle_lifetime, pg->end_particle_lifetime);     
+      p->lifetime = p->original_lifetime;
     }
     // otherwise, update its position and age
     else
@@ -127,6 +129,10 @@ void ParticleEmitter_render(ParticleEmitter* emitter)
 
   // to hold particle temporarily
   Particle* p = NULL;
+  // set blend mode
+  // as we will render particles's alpha according to its current age
+  SDL_SetTextureBlendMode(texture->texture, SDL_BLENDMODE_BLEND);
+
   for (int i=0; i<emitter->num_particles; i++)
   {
     // get particle
@@ -135,10 +141,16 @@ void ParticleEmitter_render(ParticleEmitter* emitter)
     // if particle not dead yet
     if (!p->is_dead)
     {
+      // set alpha value according to its current age
+      SDL_SetTextureAlphaMod(texture->texture, (int)(p->lifetime / p->original_lifetime * 255));
+
       // render current frame
       LTexture_ClippedRenderEx(texture, emitter->x - p->x, emitter->y - p->y, p->scale, &anim_rects[p->frame], 0, NULL, SDL_FLIP_NONE);
     }
   }
+
+  // set blend mode back to normal
+  SDL_SetTextureBlendMode(texture->texture, SDL_BLENDMODE_NONE);
 }
 
 void ParticleEmitter_free_internals(ParticleEmitter* emitter)

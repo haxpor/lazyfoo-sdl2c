@@ -12,6 +12,7 @@ static void init_default(Particle* p)
   p->frame = 0;
   p->scale = 1.0;
   p->lifetime = 0;
+  p->original_lifetime = 0;
   p->is_dead = false;
   p->anim_timecount = 0;
 }
@@ -53,6 +54,7 @@ void Particle_reset(Particle* p)
   p->frame = 0;
   p->scale = 1.0;
   p->lifetime = 0;
+  p->original_lifetime = 0;
   p->is_dead = false;
   p->anim_timecount = 0;
 }

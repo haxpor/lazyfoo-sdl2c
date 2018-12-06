@@ -28,6 +28,8 @@ typedef struct {
 
   /// remaining lifetime of particle, in seconds
   float lifetime;
+  /// lifetime initially set
+  float original_lifetime;
 
   /// scale of particle. Use for both x & y axis.
   float scale;
