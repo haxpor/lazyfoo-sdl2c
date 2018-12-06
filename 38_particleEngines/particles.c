@@ -190,12 +190,12 @@ void handleEvent(SDL_Event *e, float deltaTime)
   // apply force (wind) from right to left
   else if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_LEFT)
   {
-    ParticleEmitter_apply_force(particle_emitter, 30, 0);
+    ParticleEmitter_apply_force(particle_emitter, 30, -10);
   }
   // apply force (wind) from left to right
   else if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_RIGHT)
   {
-    ParticleEmitter_apply_force(particle_emitter, -30, 0);
+    ParticleEmitter_apply_force(particle_emitter, -30, -10);
   }
 }
 
