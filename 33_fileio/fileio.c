@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include "common.h"
 #include "LTexture.h"
 #include "LTimer.h"
@@ -141,11 +142,10 @@ bool setup()
     {
       SDL_Log("created new file for writing");
 
-      for (int i=0; i<TOTAL_DATA; i++)
-      {
-        data[i] = 0;
-        SDL_RWwrite(file, &data[i], sizeof(Sint32), 1);
-      }
+      // clear values in data to zero first
+      memset(data, 0, sizeof(data));
+      // write at once
+      SDL_RWwrite(file, data, sizeof(Sint32), TOTAL_DATA);
 
       // close file handler
       SDL_RWclose(file);
@@ -162,10 +162,8 @@ bool setup()
     // load data
     SDL_Log("file exists, load data from file");
 
-    for (int i=0; i<TOTAL_DATA; i++)
-    {
-      SDL_RWread(file, &data[i], sizeof(Sint32), 1);
-    }
+    // read at once
+    SDL_RWread(file, data, sizeof(Sint32), TOTAL_DATA);
 
     // close file handler
     SDL_RWclose(file);
@@ -343,10 +341,7 @@ void close()
     SDL_Log("write to file before quitting");
 
     // save data
-    for (int i=0; i<TOTAL_DATA; i++)
-    {
-      SDL_RWwrite(file, &data[i], sizeof(Sint32), 1);
-    }
+    SDL_RWwrite(file, data, sizeof(Sint32), TOTAL_DATA);
 
     // close file
     SDL_RWclose(file);
