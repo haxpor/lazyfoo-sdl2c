@@ -21,7 +21,7 @@ See _License_ for more information about rights.
 
 * The C port is not 100% similar to the original. May be slightly different, or more customization for learning purpose. So watch out and look at the code!
 * Use `template.c`, and `template.gitignore` files to kickstart each sample.
-* `LTexture.c`, `LTexture.h`, `LButton.c`, `LButton.h`, `common.c`, `common.h` are gradually improved, refactored, and added more functionality on top from one sample to another. If you need a more updated version of it, look at the most recent sample.
+* `LTexture.c`, `LTexture.h`, `LButton.c`, `LButton.h`, `common.c`, `common.h` are gradually improved, refactored, and added more functionality on top from one sample to another. If you need a more updated version of it, look at the most recent sample. You might have to look into multiple of samples to gather all reuseable systems as certain samples don't require to use certain systems. Anyway, when this repository is done, I will separate all those reusable systems (`.c`, and `.h`) files out into separate place.
 * Each individual sample is self-contained.
 * Use `createsample.sh` to kickstart creating a new sample directory based on existing one. See comment in the source file for detail how to use.
 
