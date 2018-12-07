@@ -1,7 +1,16 @@
 # lazyfoo-sdl2c
 Source code studying Lazy Foo's SDL2 tutorial in C.
 
-Each tutroial has code ported to C based on `-std=c99`. Execute `make` to compile and build each one.
+Each tutroial has code ported to C based on `-std=c99`.
+
+# How to Build
+
+Go to each sample directory, then execute `make` to compile and build each one.  
+Execute `make clean` to clean built files.
+
+Or
+
+Just go to root directory, then execute `make` or `make clean` to build or clean respectively for all samples.
 
 # Credits Author
 
