@@ -55,7 +55,7 @@ bool LWindow_init(LWindow *window, const char* title, int screen_width, int scre
 
     // create renderer associates with this window
     // default use hardware acceleration and vsync
-    window->renderer = SDL_CreateRenderer(window->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | renderer_flags);
+    window->renderer = SDL_CreateRenderer(window->window, -1, SDL_RENDERER_ACCELERATED | renderer_flags);
     // if cannot create renderer, then we free window immediately
     if (window->renderer == NULL)
     {
