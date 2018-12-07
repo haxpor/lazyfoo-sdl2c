@@ -59,7 +59,7 @@ bool init() {
   }
 
   // create window
-  gWindow = LWindow_new("Particle Engines", SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
+  gWindow = LWindow_new("38 - Particle Engines", SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
   if (gWindow == NULL) {
     SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
     return false;

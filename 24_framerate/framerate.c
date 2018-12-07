@@ -74,7 +74,7 @@ bool init() {
   }
 
   // create window
-  gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  gWindow = SDL_CreateWindow("24 - Calcuating Frame Rate", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
   if (gWindow == NULL) {
     SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
     return false;

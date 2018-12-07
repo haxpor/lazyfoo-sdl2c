@@ -60,7 +60,7 @@ bool init() {
   }
 
   // create window
-  gWindow = LWindow_new("SDL Tutorial", screen_width, screen_height, SDL_WINDOW_RESIZABLE);
+  gWindow = LWindow_new("35 - Window Events", screen_width, screen_height, SDL_WINDOW_RESIZABLE);
   if (gWindow == NULL) {
     SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
     return false;

@@ -73,7 +73,7 @@ bool init() {
   }
 
   // create main window
-  gWindow = LWindow_new("Main Window", screen_width, screen_height, SDL_WINDOW_RESIZABLE, 0);
+  gWindow = LWindow_new("36 - Multiple Windows - Main Window", screen_width, screen_height, SDL_WINDOW_RESIZABLE, 0);
   if (gWindow == NULL) {
     SDL_Log("Main window could not be created! SDL_Error: %s", SDL_GetError());
     return false;

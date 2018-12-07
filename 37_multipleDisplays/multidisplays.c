@@ -56,7 +56,7 @@ bool init() {
   }
 
   // create window
-  gWindow = LWindow_new("SDL Tutorial", SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
+  gWindow = LWindow_new("37 - Multiple Displays", SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
   if (gWindow == NULL) {
     SDL_Log("Window could not be created! SDL_Error: %s", SDL_GetError());
     return false;
