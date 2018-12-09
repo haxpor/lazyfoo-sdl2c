@@ -134,7 +134,7 @@ bool setup()
   // map color, pick color as seen in image to swap
   Uint32 color_key = SDL_MapRGB(mapping_format, 0, 0xff, 0xff);
   // color to swap
-  Uint32 to_swap_color = SDL_MapRGBA(mapping_format, 0xff, 0xff, 0xff, 0x00);
+  Uint32 to_swap_color = SDL_MapRGBA(mapping_format, 0, 0xff, 0xff, 0x00);
   // color key pixels
   for (int i=0; i<pixel_count; i++)
   {
