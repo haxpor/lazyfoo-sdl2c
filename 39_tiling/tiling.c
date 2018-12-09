@@ -110,9 +110,28 @@ int map_num_columns;
 int level_width;
 int level_height;
 
-// check touching of walls (tiles) from box
-// use Tile* tiles[] to make it clear as parameter into function
-bool touch_walls(SDL_Rect box, Tile* tiles[], int num_tiles);
+// check touching of walls (tiles) from circle
+bool touch_walls(Circle circle, Tile* tiles, int num_tiles, int* delta_collisionx, int* delta_collisiony)
+{
+  // go through the tiles
+  Tile* tile = NULL;
+  for (int i=0; i<num_tiles; i++)
+  {
+    // get tile
+    tile = tiles + i;
+
+    // if the tile is a wall
+    if (tile->type >= TILETYPE_CENTER && tile->type <= TILETYPE_TOPLEFT)
+    {
+      if (krr_math_checkCollision_cr(circle, tile->box, delta_collisionx, delta_collisiony))
+      {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
 
 #define FILE_BUFFER 1024
 // read input mapfile
@@ -360,6 +379,15 @@ void update(float deltaTime)
 {
   Dot_Update(&dot, deltaTime);
   bound_system.f(&dot);
+  // check dot against tiles
+  int delta_collisionx = 0;
+  int delta_collisiony = 0;
+  if (touch_walls(dot.collider, tiles, num_tiles, &delta_collisionx, &delta_collisiony))
+  {
+    // dot touch with walls, then move dot back
+    dot.posX -= delta_collisionx;
+    dot.posY -= delta_collisiony;
+  }
 
   // update target position of camera to follow dot (after updated position of Dot)
   cam.target_x = (dot.posX + dot.collider.r) - SCREEN_WIDTH/2;
