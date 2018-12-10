@@ -98,6 +98,11 @@ LTexture* LTexture_LoadFromFileARGS(const char* path, bool withColorKey, Uint8 c
       // TODO: Add checking that pixel format should be in RGBA 32 only to make it works
       SDL_PixelFormat* mapping_format = SDL_AllocFormat(pixel_format);
       Uint32* pixels = (Uint32*)pixels_data;
+      // read pixels data from its associated surface
+      // see Remarks from https://wiki.libsdl.org/SDL_LockTexture
+      // stating that locking texture is for write-only operation
+      // thus we read from SDL_Surface instead (which is via RAM)
+      const Uint32* read_pixels = (Uint32*)formatted_surface->pixels;
       int pixel_count = (pitch / 4) * formatted_surface->h;
       // map color
       Uint32 color_key = SDL_MapRGB(mapping_format, colorKeyRed, colorKeyGreen, colorKeyBlue);
@@ -105,7 +110,7 @@ LTexture* LTexture_LoadFromFileARGS(const char* path, bool withColorKey, Uint8 c
       Uint32 transparent_color = SDL_MapRGBA(mapping_format, colorKeyRed, colorKeyGreen, colorKeyBlue, 0);
       for (int i=0; i<pixel_count; i++)
       {
-        if (pixels[i] == color_key)
+        if (read_pixels[i] == color_key)
         {
           pixels[i] = transparent_color;
         }

@@ -190,9 +190,9 @@ void render(float deltaTime)
     // get dimension of text to render (for performance, should get this values once then use in render, but in case of dynamic text that changes per frame putting here is ok)
     int text_width = 0;
     int text_height = 0;
-    LBitmapFont_measuretext(bitmapfont, "Bitmap Font.\nABCDEFGHIJKLMNOPQRSTUVWXY\nabcdefghijklmnopqrstuvwxyz\n0123456789", &text_width, &text_height);
-
-    LBitmapFont_rendertext(bitmapfont, SCREEN_WIDTH/2 - text_width/2, SCREEN_HEIGHT/2 - text_height/2, "Bitmap Font.\nABCDEFGHIJKLMNOPQRSTUVWXY\nabcdefghijklmnopqrstuvwxyz\n0123456789");
+    const char* text = "Bitmap Font.\nABCDEFGHIJKLMNOPQRSTUVWXY\nabcdefghijklmnopqrstuvwxyz\n0123456789";
+    LBitmapFont_measuretext(bitmapfont, text, &text_width, &text_height);
+    LBitmapFont_rendertext(bitmapfont, SCREEN_WIDTH/2 - text_width/2, SCREEN_HEIGHT/2 - text_height/2, text);
   }
 }
 

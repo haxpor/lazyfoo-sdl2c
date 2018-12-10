@@ -28,6 +28,7 @@ typedef struct {
   int pitch;
 
   /// opaque pixel data. It can be NULL if at the moment texture isn't locked.
+  /// Used this for *write-only* operation.
   /// will be present only when lock texture via LTexture_LockTexture()
   void* pixels;
 } LTexture;
