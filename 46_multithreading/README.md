@@ -1,3 +1,4 @@
 # Changes from original
 
-* We have no need to use `LTimer` to accomplish the task of framerate independent movement for this sample as we've done all along since sample 25.
+* modify thread to run in while loop instead one time execution while also monitoring shared variable `tshared_is_extra_thread_stop` to break the loop and return from it. Use space to chage value of this variable to `true` from main thread (which only main thread can modify such value).
+* Use `LTimer` to help in simulate a loop in thread.

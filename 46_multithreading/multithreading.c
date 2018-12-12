@@ -50,10 +50,31 @@ SDL_Rect content_rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 LTexture* splash_texture = NULL;
 int data = 101;
 SDL_Thread* thread_id = NULL;
+bool tshared_is_extra_thread_stop = false;
 int thread_function(void* data)
 {
-  // print incoming data
-  SDL_Log("running thread with value = %d", (int)data);
+  // use LTimer to simulate timing loop in this thread
+  LTimer* timer = LTimer_CreateNew();
+  LTimer_Start(timer);
+
+  while (!tshared_is_extra_thread_stop)
+  {
+    Uint32 elapsed = LTimer_GetTicks(timer);
+
+    // print value every half a second
+    if (elapsed >= 500)
+    {
+      // reset timer (just call LTimer_Start() again)
+      LTimer_Start(timer);
+      // print incoming data
+      SDL_Log("running thread with value = %d", (int)data);
+    }
+  }
+
+  // free timer
+  LTimer_Free(timer);
+
+  SDL_Log("finished thread job");
 
   return 0;
 }
@@ -135,6 +156,10 @@ void handleEvent(SDL_Event *e, float deltaTime)
       (e->key.keysym.sym == SDLK_ESCAPE))
   {
     quit = true;
+
+    // also stop the thread
+    // if not set this to true, main thread will wait indefinitely
+    tshared_is_extra_thread_stop = true;
   }
   // toggle fullscreen via enter key
   else if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_RETURN)
@@ -157,6 +182,13 @@ void handleEvent(SDL_Event *e, float deltaTime)
       gWindow->_fullscreen = true;
       gWindow->is_minimized = false;
     }
+  }
+
+  if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_SPACE)
+  {
+    // stop thread
+    // make sure that only main thread can modify this variable
+    tshared_is_extra_thread_stop = true;
   }
 }
 

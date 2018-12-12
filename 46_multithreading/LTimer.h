@@ -35,7 +35,7 @@ extern void LTimer_Start(LTimer* timer);
 extern void LTimer_Stop(LTimer* timer);
 
 /*
- * \breif Pause the timer.
+ * \brief Pause the timer.
  * \param timer A timer to pause.
  */
 extern void LTimer_Pause(LTimer* timer);
@@ -47,7 +47,7 @@ extern void LTimer_Pause(LTimer* timer);
 extern void LTimer_Resume(LTimer* timer);
 
 /*
- * \brief Get current ticks of timer.
+ * \brief Get current ticks of timer in ms.
  * \param timer A timer to get ticks from
  */
 extern Uint32 LTimer_GetTicks(LTimer* timer);
