@@ -27,8 +27,8 @@
 // -- functions
 bool init();
 bool setup();
-void update(float deltaTime);
 void handleEvent(SDL_Event *e, float deltaTime);
+void update(float deltaTime);
 void render(float deltaTime);
 void close();
 
@@ -106,11 +106,6 @@ bool setup()
   return true;
 }
 
-void update(float deltaTime)
-{
-
-}
-
 void handleEvent(SDL_Event *e, float deltaTime)
 {
   // user requests quit
@@ -141,6 +136,11 @@ void handleEvent(SDL_Event *e, float deltaTime)
       gWindow->is_minimized = false;
     }
   }
+}
+
+void update(float deltaTime)
+{
+
 }
 
 void render(float deltaTime)
