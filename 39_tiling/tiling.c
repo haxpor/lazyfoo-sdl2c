@@ -480,20 +480,6 @@ void render(float deltaTime)
     SDL_SetRenderDrawColor(gWindow->renderer, 0xff, 0xff, 0xff, 0xff);
     SDL_RenderFillRect(gWindow->renderer, &content_rect);
 
-#ifndef DISABLE_FPS_CALC
-    // render fps on the top right corner
-    snprintf(fpsText, FPS_BUFFER-1, "%d", (int)common_avgFPS);
-
-    // generate fps texture
-    SDL_Color color = {30, 30, 30, 255};
-    LTexture *fpsTexture = LTexture_LoadFromRenderedText(fpsText, color, 0);
-    if (fpsTexture != NULL)
-    {
-      LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 10);
-      LTexture_Free(fpsTexture);
-    }
-#endif
-
     // check if tile is visible within sight of camera then render it
     int temp_collision_deltax = 0;
     int temp_collision_deltay = 0;
@@ -512,6 +498,20 @@ void render(float deltaTime)
     }
 
     Dot_Render_w_camera(&dot, cam.view_rect.x, cam.view_rect.y);
+
+#ifndef DISABLE_FPS_CALC
+    // render fps on the top right corner
+    snprintf(fpsText, FPS_BUFFER-1, "%d", (int)common_avgFPS);
+
+    // generate fps texture
+    SDL_Color color = {30, 30, 30, 255};
+    LTexture *fpsTexture = LTexture_LoadFromRenderedText(fpsText, color, 0);
+    if (fpsTexture != NULL)
+    {
+      LTexture_Render(fpsTexture, SCREEN_WIDTH - fpsTexture->width - 5, 10);
+      LTexture_Free(fpsTexture);
+    }
+#endif
   }
 }
 
