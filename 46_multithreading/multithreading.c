@@ -47,6 +47,7 @@ char fpsText[FPS_BUFFER];
 // content's rect to clear color in render loop
 SDL_Rect content_rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
+LTexture* hinttext_texture = NULL;
 LTexture* splash_texture = NULL;
 int data = 101;
 SDL_Thread* thread_id = NULL;
@@ -132,6 +133,15 @@ bool setup()
   if (gFont == NULL)
   {
     SDL_Log("Failed to load Minecraft.ttf font: %s", TTF_GetError());
+    return false;
+  }
+  
+  // hinttext texture
+  SDL_Color text_color = { 0x00, 0x00, 0x00, 0xff };
+  hinttext_texture = LTexture_LoadFromRenderedText("Hit space to stop thread", text_color, 0);
+  if (hinttext_texture == NULL)
+  {
+    SDL_Log("Failed to create texture from text");
     return false;
   }
 
@@ -225,6 +235,7 @@ void render(float deltaTime)
   }
 
   LTexture_Render(splash_texture, 0, 0);
+  LTexture_Render(hinttext_texture, 20, SCREEN_HEIGHT - 5 - hinttext_texture->height);
 }
 
 void close()
@@ -239,6 +250,10 @@ void close()
   // wait for thread to finish
   if (thread_id != NULL)
     SDL_WaitThread(thread_id, NULL);
+
+  // hinttext texture
+  if (hinttext_texture != NULL)
+    LTexture_Free(hinttext_texture);
 
   // splash texture
   if (splash_texture != NULL)
