@@ -21,7 +21,7 @@ TARGETS = \
 
 all: $(TARGETS) 
 
-$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o Particle.o ParticleGroup.o ParticleEmitter.o
+$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o LTimer.o Particle.o ParticleGroup.o ParticleEmitter.o
 	$(CC) $^ -o $(OUTPUT)$(EXE) $(LIBS)
 
 common.o: common.c common.h

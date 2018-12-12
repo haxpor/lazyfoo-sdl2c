@@ -21,7 +21,7 @@ TARGETS = \
 
 all: $(TARGETS) 
 
-$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o Dot.o BoundSystem.o Camera.o
+$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o LTimer.o Dot.o BoundSystem.o Camera.o
 	$(CC) $^ -o $(OUTPUT)$(EXE) $(LIBS)
 
 common.o: common.c common.h

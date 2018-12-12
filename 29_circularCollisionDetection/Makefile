@@ -30,7 +30,7 @@ all: $(TARGETS)
 
 vector_test: $(TARGETS_VECTORDOT_TEST) $(TARGETS_VECTOR_TEST)
 
-$(OUTPUT): $(PROGRAM).o LTexture.o common.o Dot.o krr_math.o
+$(OUTPUT): $(PROGRAM).o LTexture.o common.o Dot.o krr_math.o LTimer.o
 	$(CC) $^ -o $(OUTPUT)$(EXE) $(LIBS)
 
 common.o: common.c common.h

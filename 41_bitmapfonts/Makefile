@@ -19,7 +19,7 @@ TARGETS = \
 
 all: $(TARGETS) 
 
-$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o LBitmapFont.o
+$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o LTimer.o LBitmapFont.o
 	$(CC) $^ -o $(OUTPUT)$(EXE) $(LIBS)
 
 common.o: common.c common.h

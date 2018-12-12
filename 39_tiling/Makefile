@@ -22,7 +22,7 @@ TARGETS = \
 
 all: $(TARGETS) 
 
-$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o Camera.o BoundSystem.o Dot.o Tile.o
+$(OUTPUT): $(PROGRAM).o LWindow.o LTexture.o common.o krr_math.o LTimer.o Camera.o BoundSystem.o Dot.o Tile.o
 	$(CC) $^ -o $(OUTPUT)$(EXE) $(LIBS)
 
 common.o: common.c common.h
