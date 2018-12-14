@@ -25,6 +25,8 @@ See _License_ for more information about rights.
 * Each individual sample is self-contained.
 * Use `createsample.sh` to kickstart creating a new sample directory based on existing one. See comment in the source file for detail how to use.
 
+> Tutorial of 52-55 is put on hold (those are for mobile).
+
 # License
 
 * As stated in http://lazyfoo.net/contact.php, the rights of this derived works (code and assets) still belong to Lazyfoo otherwise noted.
