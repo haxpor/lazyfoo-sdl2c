@@ -27,6 +27,11 @@ See _License_ for more information about rights.
 
 > Tutorial of 52-55 is put on hold (those are for mobile).
 
+# Credits
+
+* Minecraft font by Craftron Gaming on dafont.com - [link](https://www.dafont.com/minecraft.font)
+* 8bit Wonder font by Joiro Hatgaya on dafont.com - [link](https://www.dafont.com/8bit-wonder.font)
+
 # License
 
 * As stated in http://lazyfoo.net/contact.php, the rights of this derived works (code and assets) still belong to Lazyfoo otherwise noted.
